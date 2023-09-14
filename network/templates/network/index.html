@@ -1,0 +1,16 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+    {%for post in posts%}
+    <div>
+        <a href="{%url 'profile' id=post.post_owner.id%}">{{post.post_owner}}</a>
+        {{post.post_content}}
+        
+        {%if post not in liked_by%}
+        <a href="{%url 'like' postid=post.id%}" >like</a>
+        {%else%}
+        <a href="{%url 'like' postid=post.id%}">unlike</a>
+        {%endif%}
+    </div>
+    {%endfor%}
+{% endblock %}
