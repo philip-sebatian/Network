@@ -13,7 +13,7 @@ def welcome(request):
 @login_required(login_url='login')
 def index(request,pageno):
     objects=[post.post for post in likes.objects.filter(Liked_by=request.user) ]
-    x=Post.objects.all()
+    x=Post.objects.order_by("-date").all()
     p=Paginator(x,10)
 
     return render(request, "network/index.html",{
@@ -132,7 +132,7 @@ def following_post(request,pageno):
         p_l=[]
         list_following=request.user.following.all()
         for i in list_following:
-            for j in Post.objects.filter(post_owner=i):
+            for j in Post.objects.order_by('-date').filter(post_owner=i):
                 p_l.append(j)
         p=Paginator(p_l,10)  
         return render(request,'network/followingPost.html',{

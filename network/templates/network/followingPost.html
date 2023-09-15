@@ -2,9 +2,7 @@
 
 {% block body %}
     {%for i in follow%}
-    <div>
-        {{i.post_content}}
-    </div>
+    <div style="color: white;"><h5>{{i.post_content}}</h5></div>
     {%endfor%}
     <nav aria-label="Page navigation example">
         <ul class="pagination">

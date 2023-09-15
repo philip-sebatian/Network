@@ -7,7 +7,7 @@
         {%for post in posts%}
         <br>
         <div class="post container" style="padding-top: 5px;font-size: 20px; ">
-            <div class=" container text-start"><img src="https://images.unsplash.com/photo-1682687220208-22d7a2543e88?ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxlZGl0b3JpYWwtZmVlZHwxfHx8ZW58MHx8fHx8&auto=format&fit=crop&w=500&q=60" alt="" style="height: 30px;width: 30px; border-radius: 15px;">&nbsp&nbsp<a style="text-decoration: none;color: white;" href="{%url 'profile' id=post.post_owner.id%}">{{post.post_owner}}</a> <span style="margin-left: 80%;">{{post.date.date}} {{post.date.time}}</span></div>
+            <div class=" container text-start"><img src="https://images.unsplash.com/photo-1682687220208-22d7a2543e88?ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxlZGl0b3JpYWwtZmVlZHwxfHx8ZW58MHx8fHx8&auto=format&fit=crop&w=500&q=60" alt="" style="height: 30px;width: 30px; border-radius: 15px;">&nbsp&nbsp<a style="text-decoration: none;color: white;" href="{%url 'profile' id=post.post_owner.id%}">{{post.post_owner}}</a> <span style="margin-left: 70%;">{{post.date.date}} {{post.date.time}}</span></div>
             <hr style="color: grey;">
             <div class="container text-start" style="height: 50%;">
                 <h5>{{post.post_content}}</h5>
@@ -15,7 +15,7 @@
             
             <div class="container text-start">
                 
-            
+            {%if post.owner != request.user%}
             <form action="{%url 'like' postid=post.id pageno=pageno%}" method="POST">
                 {% csrf_token %}
                 {%if request.user in post.Liked_by.all%}
@@ -24,6 +24,7 @@
                 <input type="submit" value="like" name="like" class="btn btn-primary" style="width: 80px;">&nbsp&nbsp{{post.Liked_by.all|length}}
                 {%endif%}
             </form>
+            {%endif%}
             </div>
         </div>
         <br>
