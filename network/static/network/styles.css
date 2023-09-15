@@ -1,6 +1,12 @@
+body{
+    background-color: black;
+    background-size:cover ;
+}
+
+
 #index-cont{
     min-height: 100vh;
-    background-color: black;
+    background-color: rgb(61, 60, 60);
 }
 #pagination{
     background-color: blue;
@@ -9,10 +15,18 @@
 .post{
     height: 30vh;
     color: white;
-    background-color: red;
+    background-color: black;
+    border-radius: 15px;
 }
 .post_image{
     height: 30px;
     width: 30px;
     border-radius: 15px;
+}
+
+#post-input{
+    height: 30vh;
+    width: 80%;
+    border-radius: 50px;
+    border: none;
 }

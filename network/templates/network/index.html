@@ -1,39 +1,43 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-{{liked_by|length}}
-    
-    <div class="container text-center" id="index-cont">
+
+    <br>
+    <div class="container text-center" id="index-cont" style="border-radius: 30px;">
         {%for post in posts%}
-        <div class="post container">
-            <div><a href="{%url 'profile' id=post.post_owner.id%}">{{post.post_owner}}</a> <img src="{{post.post_owner.img}}" alt="" class="post_img"></div>
-            {{post.post_content}}
-            {{post.Liked_by.all|length}}
+        <br>
+        <div class="post container" style="padding-top: 5px;font-size: 20px; ">
+            <div class=" container text-start"><img src="https://images.unsplash.com/photo-1682687220208-22d7a2543e88?ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxlZGl0b3JpYWwtZmVlZHwxfHx8ZW58MHx8fHx8&auto=format&fit=crop&w=500&q=60" alt="" style="height: 30px;width: 30px; border-radius: 15px;">&nbsp&nbsp<a style="text-decoration: none;color: white;" href="{%url 'profile' id=post.post_owner.id%}">{{post.post_owner}}</a> <span style="margin-left: 80%;">{{post.date.date}} {{post.date.time}}</span></div>
+            <hr style="color: grey;">
+            <div class="container text-start" style="height: 50%;">
+                <h5>{{post.post_content}}</h5>
+            </div>
+            
+            <div class="container text-start">
+                
             
             <form action="{%url 'like' postid=post.id pageno=pageno%}" method="POST">
                 {% csrf_token %}
                 {%if request.user in post.Liked_by.all%}
-                <input type="submit" value="unlike" name="unlike" class="btn btn-primary">
+                <input type="submit" value="unlike" name="unlike" class="btn btn-primary" style="width: 80px;">&nbsp&nbsp{{post.Liked_by.all|length}}
                 {%else%}
-                <input type="submit" value="like" name="like" class="btn btn-primary">
+                <input type="submit" value="like" name="like" class="btn btn-primary" style="width: 80px;">&nbsp&nbsp{{post.Liked_by.all|length}}
                 {%endif%}
             </form>
+            </div>
         </div>
         <br>
         {%endfor%}
-        <div class="container text-center" id="pagination">
-            <div>
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination">
-                      
-                      {%for i in p.page_range%}
-                      <li class="page-item"><a class="page-link" href="{% url 'index' pageno=i%}">{{i}}</a></li>
-                      {%endfor%}
-                      
-                      
-                    </ul>
-                  </nav>
-            </div>
-        </div>
+        
+        <nav aria-label="Page navigation example" style="margin-left: 47%;">
+            <ul class="pagination">
+              
+              {%for i in p.page_range%}
+              <li class="page-item"><a class="page-link" href="{% url 'index' pageno=i%}">{{i}}</a></li>
+              {%endfor%}
+              
+              
+            </ul>
+          </nav>
     </div>
 {% endblock %}

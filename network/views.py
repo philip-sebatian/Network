@@ -78,7 +78,7 @@ def newpost(request):
     if request.method=="POST":
         data=request.POST
         content=data['content']
-        f=Post(post_content=content,post_owner=request.user)
+        f=Post(post_content=content,post_owner=request.user,date=datetime.datetime.now())
         f.save()
         likes(post=f,)
         return HttpResponseRedirect(reverse('index',args=[1]))
