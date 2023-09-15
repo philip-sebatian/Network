@@ -1,10 +1,23 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
+<form action="{%url 'follow_unfollow' id=id%}" method="POST">
+    followrs-{{f_l}}  following-{{fly_l}}
+    {% csrf_token %}
+    {%if request.user != profile%}
+    {%if request.user in followers%}
+    <input type="submit" value="unfollow" name="unfollow">
+    {%else%}
+    <input type="submit" value="follow" name="follow">
+    {%endif%}
+    {%endif%}
+    
+</form>
 
 
     {%for post in posts%}
     <div>
+        
         {{post.post_content}}
     </div>
     {%endfor%}

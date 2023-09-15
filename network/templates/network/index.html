@@ -1,16 +1,39 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-    {%for post in posts%}
-    <div>
-        <a href="{%url 'profile' id=post.post_owner.id%}">{{post.post_owner}}</a>
-        {{post.post_content}}
-        
-        {%if post not in liked_by%}
-        <a href="{%url 'like' postid=post.id%}" >like</a>
-        {%else%}
-        <a href="{%url 'like' postid=post.id%}">unlike</a>
-        {%endif%}
+{{liked_by|length}}
+    
+    <div class="container text-center" id="index-cont">
+        {%for post in posts%}
+        <div class="post container">
+            <div><a href="{%url 'profile' id=post.post_owner.id%}">{{post.post_owner}}</a> <img src="{{post.post_owner.img}}" alt="" class="post_img"></div>
+            {{post.post_content}}
+            {{post.Liked_by.all|length}}
+            
+            <form action="{%url 'like' postid=post.id pageno=pageno%}" method="POST">
+                {% csrf_token %}
+                {%if request.user in post.Liked_by.all%}
+                <input type="submit" value="unlike" name="unlike" class="btn btn-primary">
+                {%else%}
+                <input type="submit" value="like" name="like" class="btn btn-primary">
+                {%endif%}
+            </form>
+        </div>
+        <br>
+        {%endfor%}
+        <div class="container text-center" id="pagination">
+            <div>
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                      
+                      {%for i in p.page_range%}
+                      <li class="page-item"><a class="page-link" href="{% url 'index' pageno=i%}">{{i}}</a></li>
+                      {%endfor%}
+                      
+                      
+                    </ul>
+                  </nav>
+            </div>
+        </div>
     </div>
-    {%endfor%}
 {% endblock %}

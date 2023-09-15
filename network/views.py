@@ -3,13 +3,21 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-
+from django.contrib.auth.decorators import login_required
 from .models import *
+from django.core.paginator import Paginator
 
 
-def index(request):
+def welcome(request):
+    return render(request,"network/welcome.html")
+@login_required(login_url='login')
+def index(request,pageno):
+    objects=[post.post for post in likes.objects.filter(Liked_by=request.user) ]
+    x=Post.objects.all()
+    p=Paginator(x,10)
+
     return render(request, "network/index.html",{
-        'posts': Post.objects.all(),'liked_by':[post.post for post in likes.objects.filter(Liked_by=request.user) ]
+        'posts': p.page(pageno).object_list,'liked_by':objects,'p':p,'pageno':pageno
     })
 
 
@@ -24,7 +32,7 @@ def login_view(request):
         # Check if authentication successful
         if user is not None:
             login(request, user)
-            return HttpResponseRedirect(reverse("index"))
+            return HttpResponseRedirect(reverse("index",args=[1]))
         else:
             return render(request, "network/login.html", {
                 "message": "Invalid username and/or password."
@@ -35,7 +43,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return HttpResponseRedirect(reverse("index"))
+    return HttpResponseRedirect(reverse("index",args=[1]))
 
 
 def register(request):
@@ -55,6 +63,7 @@ def register(request):
         try:
             user = User.objects.create_user(username, email, password)
             user.save()
+            
         except IntegrityError:
             return render(request, "network/register.html", {
                 "message": "Username already taken."
@@ -72,7 +81,7 @@ def newpost(request):
         f=Post(post_content=content,post_owner=request.user)
         f.save()
         likes(post=f,)
-        return HttpResponseRedirect(reverse('index'))
+        return HttpResponseRedirect(reverse('index',args=[1]))
     if request.method=="GET":
         return render(request,'network/newpost.html')
 def profile(request,id):
@@ -80,26 +89,52 @@ def profile(request,id):
         profile_owner=User.objects.get(id=id)
         posts=Post.objects.filter(post_owner=profile_owner)
         return render(request,'network/profile.html',{
-            'posts':posts
+            'posts':posts,"id":id ,'followers':profile_owner.followers.all(),'following':profile_owner.following.all(),'f_l':len(profile_owner.followers.all()),'fly_l':len(profile_owner.following.all()),'profile':profile_owner
         })
 
         
 
 
-def like(request,postid):
-    if request.method=="GET":
-        if not likes.objects.filter(post=Post.objects.get(id=postid),Liked_by=request.user):
+def like(request,postid,pageno):
+    if request.method=="POST":
+        if request.POST.get('like'):
             post=Post.objects.get(id=postid)
-            f=likes(post=post,Liked_by=request.user)
-            f.save()
-            return HttpResponseRedirect(reverse('index'))
+            post.Liked_by.add(request.user)
+            
+            return HttpResponseRedirect(reverse('index',args=[pageno]))
 
             
-        else:
+        if request.POST.get('unlike'):
             post=Post.objects.get(id=postid)
             
-            likes.objects.get(post=post,Liked_by=request.user).delete()
-            return HttpResponseRedirect(reverse('index'))
+            post.Liked_by.remove(request.user)
+            return HttpResponseRedirect(reverse('index',args=[pageno]))
             
         
-        
+def follow_unfollow(request,id):
+    if request.method=="POST":
+        if request.POST.get('follow'):
+            profile_owner=User.objects.get(id=id)
+            profile_owner.followers.add(request.user)
+            request.user.following.add(profile_owner)
+            return HttpResponseRedirect(reverse('profile',args=[id]))
+
+        else :
+            profile_owner=User.objects.get(id=id)
+            profile_owner.followers.remove(request.user)
+            request.user.following.remove(profile_owner)
+            return HttpResponseRedirect(reverse('profile',args=[id]))
+            
+
+
+def following_post(request,pageno):
+    if request.method=='GET':
+        p_l=[]
+        list_following=request.user.following.all()
+        for i in list_following:
+            for j in Post.objects.filter(post_owner=i):
+                p_l.append(j)
+        p=Paginator(p_l,10)  
+        return render(request,'network/followingPost.html',{
+            'follow':p.page(pageno).object_list,'p':p
+        })

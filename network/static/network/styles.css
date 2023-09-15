@@ -1,0 +1,18 @@
+#index-cont{
+    min-height: 100vh;
+    background-color: black;
+}
+#pagination{
+    background-color: blue;
+}
+
+.post{
+    height: 30vh;
+    color: white;
+    background-color: red;
+}
+.post_image{
+    height: 30px;
+    width: 30px;
+    border-radius: 15px;
+}
