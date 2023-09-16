@@ -15,7 +15,7 @@
             
             <div class="container text-start">
                 
-            {%if post.owner != request.user%}
+            {%if post.post_owner != request.user%}
             <form action="{%url 'like' postid=post.id pageno=pageno%}" method="POST">
                 {% csrf_token %}
                 {%if request.user in post.Liked_by.all%}

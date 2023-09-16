@@ -27,6 +27,6 @@ body{
 #post-input{
     height: 30vh;
     width: 80%;
-    border-radius: 50px;
+    border-radius: 10px;
     border: none;
 }

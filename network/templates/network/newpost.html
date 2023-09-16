@@ -5,7 +5,8 @@
         <br><br><br>
         <form action="{%url 'newpost'%}" method="POST" style="display: flex;flex-direction: column;justify-content: center;align-items: center;gap: 20px;">
             {% csrf_token %}
-            <input type="text" name="content" id="post-input">
+            
+            <textarea type="text" name="content" id="post-input"></textarea>
             
             <button type="submit" class="btn btn-primary ">post</button>
     

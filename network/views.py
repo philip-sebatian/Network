@@ -136,5 +136,5 @@ def following_post(request,pageno):
                 p_l.append(j)
         p=Paginator(p_l,10)  
         return render(request,'network/followingPost.html',{
-            'follow':p.page(pageno).object_list,'p':p
+            'follow':p.page(pageno).object_list,'p':p,'pageno':pageno
         })
