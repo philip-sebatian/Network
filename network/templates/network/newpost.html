@@ -1,15 +1,17 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-    <div class="container text-center" style=" background-color: rgb(61, 60, 60);min-height: 100vh;">
-        <br><br><br>
-        <form action="{%url 'newpost'%}" method="POST" style="display: flex;flex-direction: column;justify-content: center;align-items: center;gap: 20px;">
-            {% csrf_token %}
-            
-            <textarea type="text" name="content" id="post-input"></textarea>
-            
-            <button type="submit" class="btn btn-primary ">post</button>
-    
-        </form> 
+    <div style="height: 95vh; width: 95vw;display: flex;align-items: center;justify-content: center;">
+        <div class="container text-center" style=" background-color: rgb(61, 60, 60);min-height: 50vh; border-radius: 20px;">
+            <br><br><br>
+            <form action="{%url 'newpost'%}" method="POST" style="display: flex;flex-direction: column;justify-content: center;align-items: center;gap: 20px;">
+                {% csrf_token %}
+                
+                <textarea type="text" name="content" id="post-input"></textarea>
+                
+                <button type="submit" class="btn btn-primary ">post</button>
+        
+            </form> 
+        </div>
     </div>
 {% endblock %}

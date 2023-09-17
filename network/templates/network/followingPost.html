@@ -15,7 +15,7 @@
         {%if i.post_owner != request.user%}
             <form action="{%url 'like' postid=i.id pageno=pageno%}" method="POST">
                 {% csrf_token %}
-                {%if request.user in post.Liked_by.all%}
+                {%if request.user in i.Liked_by.all%}
                 <input type="submit" value="unlike" name="unlike" class="btn btn-primary" style="width: 80px;">&nbsp&nbsp{{i.Liked_by.all|length}}
                 {%else%}
                 <input type="submit" value="like" name="like" class="btn btn-primary" style="width: 80px;">&nbsp&nbsp{{i.Liked_by.all|length}}

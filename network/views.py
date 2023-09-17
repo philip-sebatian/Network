@@ -97,10 +97,13 @@ def profile(request,id):
 
 def like(request,postid,pageno):
     if request.method=="POST":
+
         if request.POST.get('like'):
             post=Post.objects.get(id=postid)
             post.Liked_by.add(request.user)
-            
+            print(request.build_absolute_uri())
+            if 'following'in request.META.get('HTTP_REFERER', None):
+                return HttpResponseRedirect(reverse('followingPost',args=[pageno]))
             return HttpResponseRedirect(reverse('index',args=[pageno]))
 
             
@@ -108,6 +111,8 @@ def like(request,postid,pageno):
             post=Post.objects.get(id=postid)
             
             post.Liked_by.remove(request.user)
+            if 'following'in request.META.get('HTTP_REFERER', None):
+                return HttpResponseRedirect(reverse('followingPost',args=[pageno]))
             return HttpResponseRedirect(reverse('index',args=[pageno]))
             
         
